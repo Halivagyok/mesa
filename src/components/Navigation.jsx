@@ -61,7 +61,7 @@ export function Navigation() {
   if (isMobile) {
     return (
       <>
-        <button onClick={toggleSidebar} className="fixed top-4 left-4 z-20 text-white">
+        <button onClick={toggleSidebar} className="fixed top-4 left-4 z-20 text-black">
           {isOpen ? <FaXmark size={24} /> : <FaBars size={24} />}
         </button>
         {isOpen && (
