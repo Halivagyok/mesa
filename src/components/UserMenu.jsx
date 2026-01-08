@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { FaUserAlt } from 'react-icons/fa';
 import ChatRequests from './ChatRequests';
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'requests'
+  const [hasPendingRequests, setHasPendingRequests] = useState(false);
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const q = query(collection(db, 'chatRequests'), where('to', '==', currentUser.uid));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      setHasPendingRequests(!querySnapshot.empty);
+    });
+
+    return unsubscribe;
+  }, [currentUser]);
 
   const handleLogout = async () => {
     try {
@@ -22,11 +34,14 @@ export default function UserMenu() {
 
   return (
     <div className="relative">
-      <button onClick={() => setIsOpen(!isOpen)} className="flex items-center">
+      <button onClick={() => setIsOpen(!isOpen)} className="relative flex items-center">
         {currentUser.photoURL ? (
           <img src={currentUser.photoURL} alt="User" className="w-8 h-8 rounded-full" />
         ) : (
           <FaUserAlt className="w-8 h-8" />
+        )}
+        {hasPendingRequests && (
+          <span className="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-500" />
         )}
       </button>
       {isOpen && (
@@ -41,12 +56,15 @@ export default function UserMenu() {
               Profile
             </button>
             <button
-              className={`flex-1 py-2 text-sm font-medium ${
+              className={`relative flex-1 py-2 text-sm font-medium ${
                 activeTab === 'requests' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'
               }`}
               onClick={() => setActiveTab('requests')}
             >
               Requests
+              {hasPendingRequests && (
+                <span className="absolute top-2 right-2 block h-2 w-2 rounded-full ring-1 ring-white bg-red-500" />
+              )}
             </button>
           </div>
           {activeTab === 'profile' && (
@@ -66,7 +84,7 @@ export default function UserMenu() {
             </div>
           )}
           {activeTab === 'requests' && (
-            <div className="py-2">
+            <div className="py-2 max-h-60 overflow-y-auto">
               <ChatRequests />
             </div>
           )}

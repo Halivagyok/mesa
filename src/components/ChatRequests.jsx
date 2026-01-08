@@ -65,7 +65,7 @@ export default function ChatRequests() {
   }
 
   return (
-    <div className="mt-4">
+    <div className="">
       {requests.length > 0 && (
         <>
           <h3 className="p-2 text-lg font-bold">Chat Requests</h3>

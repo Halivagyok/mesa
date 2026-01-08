@@ -46,6 +46,8 @@ export function Navigation() {
         <Button text={<FaHouseChimney />} to="/" />
         <div className="mt-4 overflow-y-auto">
           {currentUser && (
+            <>
+              <ChatList />
             </>
           )}
         </div>
