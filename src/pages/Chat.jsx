@@ -12,6 +12,7 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore';
+import { useTheme } from '../contexts/ThemeContext';
 import { FaPaperPlane } from 'react-icons/fa';
 
 export default function Chat() {
@@ -22,6 +23,7 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const { customColor } = useTheme();
 
   useEffect(() => {
     if (!chatId) return;
@@ -93,9 +95,10 @@ export default function Chat() {
             <div
               className={`p-2 rounded-lg max-w-xs ${
                 message.senderId === currentUser.uid
-                  ? 'bg-blue-500 text-white'
+                  ? 'text-white'
                   : 'bg-gray-300 text-black'
               }`}
+              style={message.senderId === currentUser.uid ? { backgroundColor: customColor } : {}}
             >
               <p className="text-sm font-bold">{message.sender?.username}</p>
               <p>{message.text}</p>
@@ -117,7 +120,8 @@ export default function Chat() {
         />
         <button
           type="submit"
-          className="px-4 py-2 text-white bg-blue-500 rounded-r-lg hover:bg-blue-600"
+          className="px-4 py-2 text-white rounded-r-lg"
+          style={{ backgroundColor: customColor }}
         >
           <FaPaperPlane />
         </button>
