@@ -36,8 +36,8 @@ export default function Chat() {
     const q = query(messagesColRef, orderBy('createdAt'));
     const unsubscribeMessages = onSnapshot(q, async (querySnapshot) => {
       const messagesData = [];
-      for (const doc of querySnapshot.docs) {
-        const messageData = { id: doc.id, ...doc.data() };
+      for (const messageDoc of querySnapshot.docs) {
+        const messageData = { id: messageDoc.id, ...messageDoc.data() };
         const userDoc = await getDoc(doc(db, 'users', messageData.senderId));
         messageData.sender = userDoc.data();
         messagesData.push(messageData);
