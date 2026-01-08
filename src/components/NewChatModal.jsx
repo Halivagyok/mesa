@@ -111,7 +111,7 @@ export default function NewChatModal({ closeModal }) {
 
   return (
     <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg text-black">
         <h2 className="text-xl font-bold">New Chat</h2>
         <div className="flex mt-4 space-x-4">
           <button

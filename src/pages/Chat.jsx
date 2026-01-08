@@ -79,7 +79,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="p-4 border-b">
+      <header className="p-4 sm:pl-16 border-b">
         <h2 className="text-xl font-bold">{chat?.name || 'Chat'}</h2>
       </header>
       <div className="flex-1 p-4 overflow-y-auto">
@@ -100,7 +100,7 @@ export default function Chat() {
               <p className="text-sm font-bold">{message.sender?.username}</p>
               <p>{message.text}</p>
               <p className="text-xs text-right opacity-75">
-                {message.createdAt?.toDate().toLocaleTimeString()}
+                {message.createdAt?.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}
               </p>
             </div>
           </div>

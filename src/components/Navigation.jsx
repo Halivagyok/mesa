@@ -47,7 +47,7 @@ export function Navigation() {
         <div className="mt-4 overflow-y-auto">
           {currentUser && (
             <>
-              <ChatList />
+              <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
             </>
           )}
         </div>
