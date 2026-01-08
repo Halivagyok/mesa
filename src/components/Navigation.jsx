@@ -54,7 +54,7 @@ export function Navigation() {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {currentUser ? <UserMenu /> : <Button text={'Login'} to={'/login'} />}
+        {currentUser ? <UserMenu /> : null}
       </div>
     </div>
   );
