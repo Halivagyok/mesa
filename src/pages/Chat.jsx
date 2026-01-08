@@ -79,7 +79,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="p-4 sm:pl-16 border-b">
+      <header className="p-4 pl-16 border-b">
         <h2 className="text-xl font-bold">{chat?.name || 'Chat'}</h2>
       </header>
       <div className="flex-1 p-4 overflow-y-auto">
