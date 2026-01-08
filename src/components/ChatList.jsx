@@ -16,10 +16,10 @@ export default function ChatList({ onChatSelect }) {
 
     const q = query(collection(db, 'chats'), where('members', 'array-contains', currentUser.uid));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, async(querySnapshot) => {
       const chatsData = [];
-      for (const doc of querySnapshot.docs) {
-        const chatData = { id: doc.id, ...doc.data() };
+      for (const chatDocSnapshot of querySnapshot.docs) {
+        const chatData = { id: chatDocSnapshot.id, ...chatDocSnapshot.data() };
         if (chatData.type === 'personal') {
           const otherMemberId = chatData.members.find((memberId) => memberId !== currentUser.uid);
           if (otherMemberId) {
