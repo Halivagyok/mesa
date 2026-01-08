@@ -24,8 +24,8 @@ export default function ChatRequests() {
 
     const unsubscribe = onSnapshot(q, async (querySnapshot) => {
       const requestsData = [];
-      for (const doc of querySnapshot.docs) {
-        const requestData = { id: doc.id, ...doc.data() };
+      for (const chatRequestDoc of querySnapshot.docs) {
+        const requestData = { id: chatRequestDoc.id, ...chatRequestDoc.data() };
         const userDoc = await getDoc(doc(db, 'users', requestData.from));
         requestData.fromUser = userDoc.data();
         requestsData.push(requestData);
