@@ -11,6 +11,7 @@ export default function UserMenu() {
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'requests'
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) return;
 

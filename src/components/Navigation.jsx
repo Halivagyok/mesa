@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaHouseChimney, FaBars, FaXmark } from 'react-icons/fa6';
 import { Resizable } from 're-resizable';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import UserMenu from './UserMenu';
 import ChatList from './ChatList';
 import ChatRequests from './ChatRequests';
@@ -18,6 +19,7 @@ const Button = ({ text, to }) => {
 
 export function Navigation() {
   const { currentUser } = useAuth();
+  const { isDarkMode } = useTheme();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isOpen, setIsOpen] = useState(!isMobile);
   const [width, setWidth] = useState(250);
@@ -61,7 +63,7 @@ export function Navigation() {
   if (isMobile) {
     return (
       <>
-        <button onClick={toggleSidebar} className={`fixed top-4 left-4 z-20 ${isOpen ? 'text-white' : 'text-black'}`}>
+        <button onClick={toggleSidebar} className={`fixed top-4 left-4 z-20 ${isOpen ? 'text-white' : (isDarkMode ? 'text-white' : 'text-black')}`}>
           {isOpen ? <FaXmark size={24} /> : <FaBars size={24} />}
         </button>
         {isOpen && (
