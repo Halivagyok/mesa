@@ -9,7 +9,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-4 text-black dark:text-white">
+    <div className="p-4 pl-16 text-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
 
       <div className="mb-4">
