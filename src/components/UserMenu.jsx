@@ -5,12 +5,14 @@ import { auth, db } from '../firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { FaUserAlt } from 'react-icons/fa';
 import ChatRequests from './ChatRequests';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'requests'
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
   const { currentUser } = useAuth();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) return;
@@ -46,8 +48,8 @@ export default function UserMenu() {
         )}
       </button>
       {isOpen && (
-        <div className="absolute bottom-12 left-0 w-64 py-2 mt-2 bg-white rounded-md shadow-xl">
-          <div className="flex border-b border-gray-200">
+        <div className="absolute bottom-12 left-0 w-64 py-2 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-xl dark:shadow-2xl text-black dark:text-white">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button
               className={`flex-1 py-2 text-sm font-medium ${
                 activeTab === 'profile' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'
@@ -72,13 +74,13 @@ export default function UserMenu() {
             <div className="py-2">
               <button
                 onClick={() => navigate('/settings')}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 Settings
               </button>
               <button
                 onClick={handleLogout}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 Logout
               </button>
