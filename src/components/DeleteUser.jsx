@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { auth, db } from '../firebase';
 import { deleteUser, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { doc, deleteDoc, getDoc } from 'firebase/firestore';
+import { doc, deleteDoc, getDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 
 export default function DeleteUser() {
   const { currentUser } = useAuth();
@@ -27,17 +27,32 @@ export default function DeleteUser() {
       const credential = EmailAuthProvider.credential(currentUser.email, password);
       await reauthenticateWithCredential(currentUser, credential);
 
+      const batch = writeBatch(db);
+
       // Delete user document from Firestore
-      await deleteDoc(doc(db, 'users', currentUser.uid));
+      const userDocRef = doc(db, 'users', currentUser.uid);
+      batch.delete(userDocRef);
 
       // Attempt to delete username document (if exists)
-      // This requires querying for the username associated with the UID
-      // For simplicity, we assume username is stored in user doc and can be looked up
-      const userDoc = await getDoc(doc(db, 'users', currentUser.uid)); // Re-fetch or pass username
-      const username = userDoc.data()?.username;
+      const userDocSnapshot = await getDoc(userDocRef);
+      const username = userDocSnapshot.data()?.username;
       if (username) {
-        await deleteDoc(doc(db, 'usernames', username));
+        batch.delete(doc(db, 'usernames', username));
       }
+
+      // Delete personal chats associated with the user
+      const personalChatsQuery = query(
+        collection(db, 'chats'),
+        where('members', 'array-contains', currentUser.uid),
+        where('type', '==', 'personal')
+      );
+      const personalChatsSnapshot = await getDocs(personalChatsQuery);
+      personalChatsSnapshot.forEach((chatDoc) => {
+        batch.delete(chatDoc.ref);
+      });
+
+      // Commit all batch deletions
+      await batch.commit();
 
       // Delete user from Firebase Auth
       await deleteUser(currentUser);

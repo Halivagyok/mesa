@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaHouseChimney, FaBars, FaXmark } from 'react-icons/fa6';
+import { FaHouseChimney, FaBars, FaXmark, FaRegNoteSticky } from 'react-icons/fa6';
 import { Resizable } from 're-resizable';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -46,6 +46,7 @@ export function Navigation() {
     <div className="flex flex-col h-full justify-between py-4 px-4 bg-black/60 text-white">
       <div>
         <Button text={<FaHouseChimney />} to="/" />
+        {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
         <div className="mt-4 overflow-y-auto">
           {currentUser && (
             <>

@@ -8,6 +8,7 @@ import Chat from './pages/Chat';
 import Admin from './pages/Admin';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import Notepad from './components/Notepad';
 import { useAuth } from './contexts/AuthContext';
 import AdminRoute from './components/AdminRoute';
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/chat/:chatId" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/notepad" element={<Notepad />} />
         </Route>
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<Admin />} />
