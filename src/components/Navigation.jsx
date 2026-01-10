@@ -11,7 +11,7 @@ import ChatRequests from './ChatRequests';
 const Button = ({ text, to }) => {
   const navigate = useNavigate();
   return (
-    <button className="flex text-2xl items-start mx-auto" onClick={() => navigate(to)}>
+    <button className="flex text-2xl items-start" onClick={() => navigate(to)}>
       {text}
     </button>
   );
@@ -44,10 +44,11 @@ export function Navigation() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full justify-between py-4 px-4 bg-black/60 text-white">
-      <div>
+      <div className="flex gap-2">
         <Button text={<FaHouseChimney />} to="/" />
         {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
-        <div className="mt-4 overflow-y-auto">
+      </div>
+      <div className="mt-4 overflow-y-auto">
           {currentUser && (
             <>
               <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
