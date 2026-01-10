@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import DeleteUser from '../components/DeleteUser';
 
 export default function Settings() {
   const { isDarkMode, toggleDarkMode, customColor, setCustomColor } = useTheme();
@@ -40,6 +41,7 @@ export default function Settings() {
           className="w-16 h-10 p-1 border border-gray-300 rounded-lg cursor-pointer dark:bg-gray-700 dark:border-gray-600"
         />
       </div>
+      <DeleteUser />
     </div>
   );
 }
