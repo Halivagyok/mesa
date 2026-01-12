@@ -17,7 +17,7 @@ export default function ChatList({ onChatSelect }) {
     const q = query(collection(db, 'chats'), where('members', 'array-contains', currentUser.uid));
 
     const unsubscribe = onSnapshot(q, async(querySnapshot) => {
-      const chatsData = [];
+      let chatsData = [];
       for (const chatDocSnapshot of querySnapshot.docs) {
         const chatData = { id: chatDocSnapshot.id, ...chatDocSnapshot.data() };
         if (chatData.type === 'personal') {
@@ -43,7 +43,7 @@ export default function ChatList({ onChatSelect }) {
 
   return (
     <div className="overflow-y-auto">
-      <div className="flex items-center justify-between p-2">
+      <div className="flex items-center justify-basyncetween p-2">
         <h3 className="text-lg font-bold">Chats</h3>
         <button onClick={() => setShowModal(true)} className="p-2 text-white">
           <FaPlus />

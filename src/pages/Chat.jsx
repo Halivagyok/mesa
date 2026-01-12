@@ -85,29 +85,66 @@ export default function Chat() {
         <h2 className="text-xl font-bold">{chat?.name || 'Chat'}</h2>
       </header>
       <div className="flex-1 p-4 overflow-y-auto">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex mb-4 ${
-              message.senderId === currentUser.uid ? 'justify-end' : 'justify-start'
-            }`}
-          >
+        {messages.map((message, index) => {
+          const currentCreatedAt = message.createdAt?.toDate();
+          const previousCreatedAt = index > 0 ? messages[index - 1].createdAt?.toDate() : null;
+          let showFullDate = false;
+
+          if (currentCreatedAt) {
+            if (!previousCreatedAt) {
+              showFullDate = true;
+            } else {
+              const isSameDay =
+                currentCreatedAt.getDate() === previousCreatedAt.getDate() &&
+                currentCreatedAt.getMonth() === previousCreatedAt.getMonth() &&
+                currentCreatedAt.getFullYear() === previousCreatedAt.getFullYear();
+              if (!isSameDay) {
+                showFullDate = true;
+              }
+            }
+          }
+
+          const formatFullDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}/${month}/${day} ${hours}:${minutes}`;
+          };
+
+          return (
             <div
-              className={`p-2 rounded-lg max-w-xs ${
-                message.senderId === currentUser.uid
-                  ? 'text-white'
-                  : 'bg-gray-300 text-black'
+              key={message.id}
+              className={`flex mb-4 ${
+                message.senderId === currentUser.uid ? 'justify-end' : 'justify-start'
               }`}
-              style={message.senderId === currentUser.uid ? { backgroundColor: customColor } : {}}
             >
-              <p className="text-sm font-bold">{message.sender?.username}</p>
-              <p>{message.text}</p>
-              <p className="text-xs text-right opacity-75">
-                {message.createdAt?.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}
-              </p>
+              <div
+                className={`p-2 rounded-lg max-w-xs ${
+                  message.senderId === currentUser.uid
+                    ? 'text-white'
+                    : 'bg-gray-300 text-black'
+                }`}
+                style={message.senderId === currentUser.uid ? { backgroundColor: customColor } : {}}
+              >
+                <p className="text-sm font-bold">{message.sender?.username}</p>
+                <p>{message.text}</p>
+                <p className="text-xs text-right opacity-75">
+                  {currentCreatedAt
+                    ? showFullDate
+                      ? formatFullDate(currentCreatedAt)
+                      : currentCreatedAt.toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hourCycle: 'h23',
+                        })
+                    : ''}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSendMessage} className="flex p-4 border-t">

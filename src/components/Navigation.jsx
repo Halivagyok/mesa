@@ -44,22 +44,24 @@ export function Navigation() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full justify-between py-4 px-4 bg-black/60 text-white">
-      <div className="flex gap-2">
-        <Button text={<FaHouseChimney />} to="/" />
-        {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
-      </div>
-      <div className="mt-4 overflow-y-auto">
-          {currentUser && (
-            <>
-              <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
-            </>
-          )}
+      <div className="">
+        <div className="flex gap-2 justify-between">
+          <Button text={<FaHouseChimney />} to="/" />
+          {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
         </div>
+        <div className="mt-4 overflow-y-auto">
+            {currentUser && (
+              <>
+                <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
+              </>
+            )}
+          </div>
       </div>
       <div className="flex flex-col gap-4">
         {currentUser ? <UserMenu /> : null}
       </div>
-    </div>
+    </div> 
+    
   );
 
   if (isMobile) {
