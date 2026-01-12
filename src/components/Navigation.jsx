@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaHouseChimney, FaBars, FaXmark, FaRegNoteSticky } from 'react-icons/fa6';
 import { Resizable } from 're-resizable';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import UserMenu from './UserMenu';
 import ChatList from './ChatList';
-import ChatRequests from './ChatRequests';
 
 const Button = ({ text, to }) => {
   const navigate = useNavigate();
@@ -17,9 +15,29 @@ const Button = ({ text, to }) => {
   );
 };
 
+const SidebarContent = ({ currentUser, isMobile, setIsOpen }) => (
+  <div className="flex flex-col h-full justify-between py-4 px-4 bg-black/60 text-white">
+    <div className="">
+      <div className="flex gap-2 justify-between">
+        <Button text={<FaHouseChimney />} to="/" />
+        {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
+      </div>
+      <div className="mt-4 overflow-y-auto">
+          {currentUser && (
+            <>
+              <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
+            </>
+          )}
+        </div>
+    </div>
+    <div className="flex flex-col gap-4">
+      {currentUser ? <UserMenu /> : null}
+    </div>
+  </div> 
+);
+
 export function Navigation() {
   const { currentUser } = useAuth();
-  const { isDarkMode } = useTheme();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isOpen, setIsOpen] = useState(!isMobile);
   const [width, setWidth] = useState(250);
@@ -42,28 +60,6 @@ export function Navigation() {
     setIsOpen(!isOpen);
   };
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full justify-between py-4 px-4 bg-black/60 text-white">
-      <div className="">
-        <div className="flex gap-2 justify-between">
-          <Button text={<FaHouseChimney />} to="/" />
-          {currentUser && <Button text={<FaRegNoteSticky />} to="/notepad" />}
-        </div>
-        <div className="mt-4 overflow-y-auto">
-            {currentUser && (
-              <>
-                <ChatList onChatSelect={() => isMobile && setIsOpen(false)} />
-              </>
-            )}
-          </div>
-      </div>
-      <div className="flex flex-col gap-4">
-        {currentUser ? <UserMenu /> : null}
-      </div>
-    </div> 
-    
-  );
-
   if (isMobile) {
     return (
       <>
@@ -72,7 +68,7 @@ export function Navigation() {
         </button>
         {isOpen && (
           <div className="fixed inset-0 z-10 bg-black/80">
-            <SidebarContent />
+            <SidebarContent currentUser={currentUser} isMobile={isMobile} setIsOpen={setIsOpen} />
           </div>
         )}
       </>
@@ -89,7 +85,7 @@ export function Navigation() {
       maxWidth={500}
       enable={{ right: true }}
     >
-      <SidebarContent />
+      <SidebarContent currentUser={currentUser} isMobile={isMobile} setIsOpen={setIsOpen} />
     </Resizable>
   );
 }

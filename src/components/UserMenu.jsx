@@ -5,14 +5,12 @@ import { auth, db } from '../firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { FaUserAlt } from 'react-icons/fa';
 import ChatRequests from './ChatRequests';
-import { useTheme } from '../contexts/ThemeContext';
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' or 'requests'
   const [hasPendingRequests, setHasPendingRequests] = useState(false);
-  const { currentUser } = useAuth();
-  const { isDarkMode } = useTheme();
+  const { currentUser, userData } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) return;
@@ -78,6 +76,14 @@ export default function UserMenu() {
               >
                 Settings
               </button>
+              {userData?.isAdmin && (
+                <button
+                  onClick={() => navigate('/admin')}
+                  className="block w-full px-4 py-2 text-left text-sm text-indigo-600 dark:text-indigo-400 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Admin Panel
+                </button>
+              )}
               <button
                 onClick={handleLogout}
                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"

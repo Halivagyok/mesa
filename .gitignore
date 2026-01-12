@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 agent_log.md
+
 .env
+upload.txt
